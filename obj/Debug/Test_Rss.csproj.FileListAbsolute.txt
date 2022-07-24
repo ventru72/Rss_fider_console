@@ -1,0 +1,10 @@
+C:\Users\masta\source\repos\Test_Rss\Test_Rss\bin\Debug\Test_Rss.exe.config
+C:\Users\masta\source\repos\Test_Rss\Test_Rss\bin\Debug\Test_Rss.exe
+C:\Users\masta\source\repos\Test_Rss\Test_Rss\bin\Debug\Test_Rss.pdb
+C:\Users\masta\source\repos\Test_Rss\Test_Rss\obj\Debug\Test_Rss.csproj.AssemblyReference.cache
+C:\Users\masta\source\repos\Test_Rss\Test_Rss\obj\Debug\Test_Rss.csproj.SuggestedBindingRedirects.cache
+C:\Users\masta\source\repos\Test_Rss\Test_Rss\obj\Debug\Test_Rss.csproj.CoreCompileInputs.cache
+C:\Users\masta\source\repos\Test_Rss\Test_Rss\obj\Debug\Test_Rss.exe
+C:\Users\masta\source\repos\Test_Rss\Test_Rss\obj\Debug\Test_Rss.pdb
+C:\Users\masta\source\repos\Test_Rss\Test_Rss\bin\Debug\Microsoft.SyndicationFeed.ReaderWriter.dll
+C:\Users\masta\source\repos\Test_Rss\Test_Rss\obj\Debug\Test_Rss.csproj.CopyComplete
