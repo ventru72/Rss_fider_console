@@ -13,28 +13,73 @@ using Microsoft.SyndicationFeed.Rss;
 
 namespace Test_Rss
 {
-    internal class Program
+    public  class Program
     {
         public class Feed_RSS
         {
 
             public int Update { get; set; }
+            public string Url { get; set; }
+            public string Proxy_Ip { get; set; }
+            public string Proxy_User { get; set; }
+            public string Proxy_Password { get; set; }
+
+
             private readonly string Feed_Uri;
+            public Feed_RSS( )
+            {
+                 
+            }
+            public Feed_RSS(string Proxy_Ip, string Proxy_User, string Proxy_Password) 
+            {
+                this.Proxy_Ip = Proxy_Ip;
+                this.Proxy_User = Proxy_User;
+                this.Proxy_Password = Proxy_Password;
+            }
             public Feed_RSS(string Feed_Uri)
             {
                 this.Feed_Uri = Feed_Uri;
             }
-
+            public void Initializing_Settings()
+            {
+                Feed_RSS feed_RSS_setting = new Feed_RSS("dfdf", "dfdf", "dfdf");
+                string path = "setting.xml";
+                XmlSerializer deser = new XmlSerializer(typeof(Feed_RSS), path);
+                using (Stream stream = new FileStream(path, FileMode.Create, FileAccess.Write))
+                {
+                   deser.Serialize(stream, feed_RSS_setting);
+                }
+            }
+            public Feed_RSS Deser()
+            {
+                
+                string path = "setting.xml";
+                XmlSerializer deser = new XmlSerializer(typeof(Feed_RSS), path);
+                using(Stream stream = new FileStream(path, FileMode.Open, FileAccess.Read))
+                {
+                    Feed_RSS feed_RSS_setting = deser.Deserialize(stream) as Feed_RSS;
+                    return feed_RSS_setting;
+                }
+            }
             public async Task GetNewsFeed()
             {
-                WebProxy wp = new WebProxy("92.168.1.100", true);
-                wp.Credentials = new NetworkCredential("user1", "user1Password");
+                Feed_RSS feed_RSS_setting = Deser();
+                if (feed_RSS_setting.Update == 0) feed_RSS_setting.Update = 1;
+
+                WebProxy wp = new WebProxy(feed_RSS_setting.Proxy_Ip, true);
+                wp.Credentials = new NetworkCredential(feed_RSS_setting.Proxy_User, feed_RSS_setting.Proxy_Password);
                 WebRequest wrq = WebRequest.Create("http://www.example.com");
                 wrq.Proxy = wp;
-                WebResponse wrs = wrq.GetResponse();
+                WebResponse wrs = wrq.GetResponse(); 
+                
                 List<Instance_Feed> rssNewsItems = new List<Instance_Feed>();
-                using (XmlReader xmlReader = XmlReader.Create(Feed_Uri, new XmlReaderSettings() { Async = true }))
+
+                bool exit = false;
+                while (exit != true)
                 {
+                 using (XmlReader xmlReader = XmlReader.Create(Feed_Uri, new XmlReaderSettings() { Async = true }))
+                 {
+                 
                     RssFeedReader feedReader = new RssFeedReader(xmlReader);
                     while (await feedReader.Read())
                     {
@@ -49,15 +94,20 @@ namespace Test_Rss
                             rssNewsItems.Add(rssItem);
                         }
                     }
+                 }
+                    await Task.Delay(feed_RSS_setting.Update * 3600);
                 }
-               // return rssNewsItems.OrderByDescending(p => p.PublishDate).ToArray();
+
             }
         }
         static void Main(string[] args)
         {
+           
             Feed_RSS newsFeedService = new Feed_RSS("https://habr.com/rss/interesting/");
+
             newsFeedService.GetNewsFeed();
-            
+
+            newsFeedService.Initializing_Settings();
 
             //  XmlReader reader = XmlReader.Create("https://habr.com/rss/interesting/");
             //SyndicationFeed feed = SyndicationFeed.Load(reader);
